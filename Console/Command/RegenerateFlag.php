@@ -39,12 +39,10 @@ class RegenerateFlag extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $write = $this->writeFactory->create(BP);
+        $output->writeln('Path: '.GeneratedFiles::REGENERATE_FLAG);
+
         $output->writeln('Original path: '.$write->getAbsolutePath(GeneratedFiles::REGENERATE_FLAG));
         $output->writeln('Without slash: '.$write->getAbsolutePath('var/.regenerate'));
-
-        $this->generatedFiles->cleanGeneratedFiles();
-
-        $write->touch(GeneratedFiles::REGENERATE_FLAG);
 
         return Command::SUCCESS;
     }

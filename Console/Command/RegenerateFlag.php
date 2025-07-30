@@ -12,6 +12,7 @@ class RegenerateFlag extends Command
 {
     public function __construct(
         private WriteFactory $writeFactory,
+        private GeneratedFiles $generatedFiles,
         ?string $name = null
     )  {
         parent::__construct($name);
@@ -38,7 +39,12 @@ class RegenerateFlag extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $write = $this->writeFactory->create(BP);
-        echo 'Regenerate flag path: '.$write->getAbsolutePath(GeneratedFiles::REGENERATE_FLAG)."\n";
+        $output->writeln('Original path: '.$write->getAbsolutePath(GeneratedFiles::REGENERATE_FLAG));
+        $output->writeln('Without slash: '.$write->getAbsolutePath('var/.regenerate'));
+
+        $this->generatedFiles->cleanGeneratedFiles();
+
+        $write->touch(GeneratedFiles::REGENERATE_FLAG);
 
         return Command::SUCCESS;
     }
